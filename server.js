@@ -1,13 +1,12 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors');
 const app = express();
-const port = 3000;
 
 const API_KEY = 'NayemLeakStudioBD';
 
 // Enable CORS for all routes
-app.use(cors()); // Add this line to enable CORS for all routes
+app.use(cors());
 
 // Middleware to check API key
 app.use((req, res, next) => {
@@ -16,7 +15,6 @@ app.use((req, res, next) => {
         return res.status(403).send(`
             <h1>403 Forbidden</h1>
             <p>Invalid API key. Please contact our support team at <a href="https://facebook.com/leakstudio">Leak Studio Bangladesh</a> for assistance.</p>
-            <p>Ensure that you have the correct credentials to access this resource.</p>
         `);
     }
     next();
@@ -42,6 +40,5 @@ app.get('/image', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running on port${port}`);
-});
+// Export the app for Vercel
+module.exports = app;
