@@ -1,13 +1,12 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
-const Jimp = require('jimp'); // Import Jimp for image manipulation
+const cors = require('cors'); // Import the cors package
 const app = express();
 
 const API_KEY = 'NayemLeakStudioBD';
 
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors()); // Add this line to enable CORS for all routes
 
 // Middleware to check API key
 app.use((req, res, next) => {
@@ -22,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Endpoint to fetch images and overlay text
+// Endpoint to fetch images
 app.get('/image', async (req, res) => {
     const iconName = req.query.iconName;
     if (!iconName) {
@@ -32,36 +31,11 @@ app.get('/image', async (req, res) => {
     const imageUrl = `https://freefiremobile-a.akamaihd.net/common/Local/PK/FF_UI_Icon/${iconName}`;
 
     try {
-        // Fetch the image from the URL
-        const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-        const imageBuffer = Buffer.from(response.data, 'binary');
-
-        // Load the image using Jimp
-        const image = await Jimp.read(imageBuffer);
-
-        // Load a font from Jimp
-        const font = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE); // You can change the font size and color
-
-        // Add the text to the image
-        image.print(
-            font,
-            0,
-            0,
-            {
-                text: '@leakstudio',
-                alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-                alignmentY: Jimp.VERTICAL_ALIGN_MIDDLE
-            },
-            image.bitmap.width,
-            image.bitmap.height
-        );
-
-        // Get the image buffer with the text overlay
-        const modifiedBuffer = await image.getBufferAsync(Jimp.MIME_PNG);
-
-        // Send the modified image as response
+        const response = await axios.get(imageUrl, {
+            responseType: 'arraybuffer'
+        });
         res.set('Content-Type', 'image/png');
-        res.send(modifiedBuffer);
+        res.send(response.data);
     } catch (error) {
         res.status(404).send('Image not found');
     }
