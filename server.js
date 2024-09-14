@@ -43,5 +43,5 @@ app.get('/image', async (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://ffcdn.ohxia.xyz:${port}`);
+    console.log(`Server running on port${port}`);
 });
